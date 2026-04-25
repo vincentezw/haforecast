@@ -1,0 +1,15 @@
+{
+ 	"include":  [
+		"$(MODDABLE)/examples/manifest_mod.json",
+    "$(MODDABLE)/examples/manifest_typings.json"
+	],
+  "resources": {
+		"*": "./assets/*"
+	},
+	"modules": {
+		"*": [
+      "./assets.js",
+      "./main.js"
+    ]
+	}
+}

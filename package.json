@@ -1,0 +1,55 @@
+{
+  "name": "haforecast",
+  "author": "vincentezw",
+  "version": "1.0.0",
+  "keywords": ["pebble-app"],
+  "private": true,
+  "dependencies": {
+    "@rebble/clay": "^1.0.8"
+  },
+  "pebble": {
+    "displayName": "HA Forecast",
+    "uuid": "c530865a-13ee-4b08-ae37-9b0ea3fcf628",
+    "projectType": "moddable",
+    "sdkVersion": "3",
+    "enableMultiJS": true,
+    "targetPlatforms": [
+      "emery",
+      "gabbro"
+    ],
+    "watchapp": {
+      "watchface": false
+    },
+    "messageKeys": [
+      "COMMAND",
+      "DATA",
+      "PAGE",
+      "TOTAL"
+    ],
+    "resources": {
+      "media": [
+        {
+          "type": "bitmap",
+          "name": "WEATHER",
+          "file": "img/weather_strip.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "WIND",
+          "file": "img/wind_strip.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "ACTIONBAR",
+          "file": "img/action_bar.png"
+        },
+        {
+          "type": "bitmap",
+          "name": "MENU_ICON",
+          "file": "img/icon.png",
+          "menuIcon": true
+        }
+      ]
+    }
+  }
+}
