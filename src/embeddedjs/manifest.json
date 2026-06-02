@@ -8,7 +8,6 @@
 	},
 	"modules": {
 		"*": [
-      "./assets.js",
       "./main.js"
     ]
 	}

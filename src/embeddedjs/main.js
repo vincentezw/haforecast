@@ -1,7 +1,6 @@
 import {} from "piu/MC";
 import Message from "pebble/message";
 import Button from "pebble/button";
-import {actionBarSkin, colours, styles, weatherSkin, windSkin} from "./assets";
 
 const SCROLL_STEP = 20;
 
@@ -12,6 +11,49 @@ let isLoading = true;
 let firstLoad = true;
 let appMessageWritable = false;
 let pendingCommand = null;
+
+const colours = Object.freeze({
+  white: "#FFFFFF",
+  black: "#000000",
+});
+
+const weatherSkin = new Skin({
+  texture: new Texture(1),
+  width: 25,
+  height: 25,
+  fill: colours.white,
+  variants: 25,
+});
+
+const windSkin = new Skin({
+  texture: new Texture(2),
+  width: 15,
+  height: 15,
+  fill: colours.white,
+  variants: 15,
+});
+
+const actionBarSkin = new Skin({
+  texture: new Texture(3),
+  width: 17,
+  height: 14,
+  fill: colours.black,
+  variants: 17,
+});
+
+const styles = Object.freeze({
+  small: new Style({
+    color: colours.black,
+    font: "14px Gothic",
+    horizontal: "left",
+    vertical: "middle",
+  }),
+  boldSmall: new Style({
+    color: colours.black,
+    font: "bold 14px Gothic",
+    // horizontal: "left",
+  }),
+});
 
 const appMessage = new Message({
   keys: ["COMMAND", "DATA", "PAGE", "TOTAL"],
@@ -96,7 +138,7 @@ new Button({
         scrollBy(SCROLL_STEP);
         break;
       case "select":
-        const maxCommand = 3; // TODO sunset/sunrise
+        const maxCommand = 3;
         currentCommand = (currentCommand % maxCommand) + 1;
         if (currentCommand > maxCommand) {
           currentCommand = 1;
@@ -175,17 +217,12 @@ class ForecastRow extends Row {
         new Label(null, { 
           style: styles.small, string: item[1] + "°" 
         }),
-        new Column(null, {
-          left: 7,
-          width: 28,
-          contents: [
-            new Content(null, {
-              width: 12, height: 12, skin: windSkin,
-              variant: Math.round(item[3] / 45) % 8
-            }),
-            new Label(null, { style: styles.small, string: item[4], top: 3 }),
-          ],
+        new Content(null, {
+          width: 12, height: 12, skin: windSkin,
+          left: 3,
+          variant: Math.round(item[3] / 45) % 8
         }),
+        new Label(null, { style: styles.small, string: item[4], top: 15, left: 3 }),
         new Label(null, {
           left: 7, top: 8, width: 62, style: styles.small, 
           string: "Rain: " + item[5] + "\nHum: " + item[6] + "%"
@@ -205,7 +242,7 @@ function renderSun(rows) {
     skin: weatherSkin,
     variant: isDay ? 12 : 0,
   }));
-  
+
   const f = (t) => {
     var dt = new Date(parseInt(t));
     var m = dt.getMinutes();
@@ -214,7 +251,7 @@ function renderSun(rows) {
 
   let s = "Status: " + (isDay ? "day" : "night") + "\n";
   s = s + "Day length: " + d[5] + "\n\n";
-  
+
   if (+d[2] > +d[3]) {
     s += "Sunset:  " + f(d[3]) + "\n";
     s += "Dusk: " + f(d[4]) + "\n";
@@ -239,16 +276,11 @@ function renderSun(rows) {
 
 function renderForecast(forecast, scrollToBottom) {
   forecastList.empty();
-  if (firstLoad) {
-    firstLoad = false;
-    application.empty();
-    application.add(iconColumn);
-    application.add(scroller);
-  }
 
   for (let i = 0; i < forecast.length; i++) {
     const item = forecast[i].split(",");
     forecastList.add(new ForecastRow(item));
+    trace("D" + i + "\n");
   };
 
   if (scrollToBottom) {
@@ -256,6 +288,13 @@ function renderForecast(forecast, scrollToBottom) {
     scroller.scroll = { x: 0, y: maxScroll };
   } else {
     scroller.scroll = { x: 0, y: 0 };
+  }
+
+  if (firstLoad) {
+    firstLoad = false;
+    application.empty();
+    application.add(iconColumn);
+    application.add(scroller);
   }
 }
 
