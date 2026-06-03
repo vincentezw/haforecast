@@ -19,10 +19,10 @@ const colours = Object.freeze({
 
 const weatherSkin = new Skin({
   texture: new Texture(1),
-  width: 25,
-  height: 25,
+  width: 30,
+  height: 30,
   fill: colours.white,
-  variants: 25,
+  variants: 30,
 });
 
 const windSkin = new Skin({
@@ -211,7 +211,7 @@ class ForecastRow extends Row {
           string: formatTimeLabel(item[0]) 
         }),
         new Content(null, {
-          top: 10, left: 7, width: 25, height: 35,
+          top: 10, left: 3, width: 25, height: 35,
           skin: weatherSkin, variant: parseInt(item[2])
         }),
         new Label(null, { 
@@ -280,7 +280,6 @@ function renderForecast(forecast, scrollToBottom) {
   for (let i = 0; i < forecast.length; i++) {
     const item = forecast[i].split(",");
     forecastList.add(new ForecastRow(item));
-    trace("D" + i + "\n");
   };
 
   if (scrollToBottom) {

@@ -74,7 +74,7 @@ function normalizeCondition(c) {
     "snowy": 11,
     "sunny": 12,
     "windy-variant": 13,
-    "windy": 14
+    "windy": 13
   };
   return map[c];
 }
