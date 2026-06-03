@@ -211,7 +211,7 @@ class ForecastRow extends Row {
           string: formatTimeLabel(item[0]) 
         }),
         new Content(null, {
-          top: 10, left: 3, width: 25, height: 35,
+          top: 0, left: 3, width: 30, height: 30,
           skin: weatherSkin, variant: parseInt(item[2])
         }),
         new Label(null, { 
@@ -222,9 +222,9 @@ class ForecastRow extends Row {
           left: 3,
           variant: Math.round(item[3] / 45) % 8
         }),
-        new Label(null, { style: styles.small, string: item[4], top: 15, left: 3 }),
+        new Label(null, { style: styles.small, string: item[4], top: 8, left: 3 }),
         new Label(null, {
-          left: 7, top: 8, width: 62, style: styles.small, 
+          left: 7, top: 0, width: 62, style: styles.small, 
           string: "Rain: " + item[5] + "\nHum: " + item[6] + "%"
         }),
       ]
