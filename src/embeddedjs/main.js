@@ -13,7 +13,7 @@ let appMessageWritable = false;
 let pendingCommand = null;
 
 const colours = Object.freeze({
-  white: "#FFFFFF",
+  blue: "#7db7fa",
   black: "#000000",
 });
 
@@ -160,7 +160,7 @@ const application = new Application(null, {
       string: "Loading...",
     }),
   ],
-  skin: new Skin({ fill: colours.white })
+  skin: new Skin({ fill: colours.blue })
 });
 
 const iconColumn = new Column(null, {
@@ -215,14 +215,21 @@ class ForecastRow extends Row {
           skin: weatherSkin, variant: parseInt(item[2])
         }),
         new Label(null, { 
-          style: styles.small, string: item[1] + "°" 
+          style: styles.small, string: item[1] + "°",
+          width: 20,
         }),
         new Content(null, {
           width: 12, height: 12, skin: windSkin,
           left: 3,
           variant: Math.round(item[3] / 45) % 8
         }),
-        new Label(null, { style: styles.small, string: item[4], top: 8, left: 3 }),
+        new Label(null, {
+          style: styles.small,
+          string: item[4],
+          top: 8,
+          left: 3,
+          width: 20,
+        }),
         new Label(null, {
           left: 7, top: 0, width: 62, style: styles.small, 
           string: "Rain: " + item[5] + "\nHum: " + item[6] + "%"
