@@ -171,7 +171,7 @@ const application = new Application(null, {
 });
 
 const iconColumn = new Column(null, {
-  width: 17,
+  width: 19,
   height: application.height,
   right: 0,
   top: 0,
@@ -184,7 +184,7 @@ const iconColumn = new Column(null, {
 });
 
 const forecastList = new Column(null, { 
-  left: 0, right: 0, top: 0 
+  left: 0, right: 9, top: 0 
 });
 
 class VerticalScrollerBehavior extends Behavior {
@@ -251,8 +251,8 @@ class ForecastRow extends Row {
           variant: Math.round(item[3] / 45) % 8
         }),
         new Label(null, {
-          left: 7, top: 0, right: 0, height: 48, style: styles.small, 
-          string: "Wind: " + item[4] + "\nRain: " + item[5] + "\nHum: " + item[6] + "%"
+          left: 7, top: 0, right: 0, height: 44, style: styles.small, 
+          string: "Wind: " + item[4] + "\nRain: " + item[5] + "\nHumidity: " + item[6] + "%"
         }),
       ],
       left: 0, right: 0,

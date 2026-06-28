@@ -126,6 +126,7 @@ function sendParsedPage(raw, type, page, entity) {
 
   for (var i = startIndex; i < raw.length && i < end; i++) {
     var item = raw[i];
+    console.log("xena", JSON.stringify(item));
     parsed.push(
       new Date(item.datetime).getTime() + "," +
       Math.round(item.temperature) + "," +
