@@ -13,9 +13,15 @@ let appMessageWritable = false;
 let pendingCommand = null;
 
 const colours = Object.freeze({
-  blue: "#7db7fa",
   black: "#000000",
+  blue: "#7db7fa",
+  lightblue: "#cce6ff",
 });
+
+const rowSkins = [
+  new Skin({ fill: colours.blue }),
+  new Skin({ fill: colours.lightblue }),
+];
 
 const weatherSkin = new Skin({
   texture: new Texture(1),
@@ -46,7 +52,7 @@ const styles = Object.freeze({
     color: colours.black,
     font: "14px Gothic",
     horizontal: "left",
-    vertical: "middle",
+    vertical: "top",
   }),
   boldSmall: new Style({
     color: colours.black,
@@ -160,7 +166,8 @@ const application = new Application(null, {
       string: "Loading...",
     }),
   ],
-  skin: new Skin({ fill: colours.blue })
+  skin: new Skin({ fill: colours.blue }),
+  touchCount: 1,
 });
 
 const iconColumn = new Column(null, {
@@ -180,13 +187,33 @@ const forecastList = new Column(null, {
   left: 0, right: 0, top: 0 
 });
 
+class VerticalScrollerBehavior extends Behavior {
+	onTouchBegan(scroller, id, x, y) {
+		this.anchor = scroller.scroll.y;
+		this.y = y;
+		this.waiting = true;
+	}
+	onTouchMoved(scroller, id, x, y, ticks) {
+		let delta = y - this.y;
+		if (this.waiting) {
+			if (Math.abs(delta) < 8)
+				return;
+			this.waiting = false;
+			scroller.captureTouch(id, x, y, ticks);
+		}
+		scroller.scrollTo(0, this.anchor - delta);
+	}
+}
+
 const scroller = new Scroller(null, {
   top: 0, bottom: 0, left: 0, right: 10,
   width: 190,
   height: 220,
   active: true,
+  backgroundTouch: true,
   clip: true,
   contents: [forecastList],
+  Behavior: VerticalScrollerBehavior,
 });
 
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -203,7 +230,7 @@ function formatTimeLabel(timestamp) {
 }
 
 class ForecastRow extends Row {
-  constructor(item) {
+  constructor(index, item) {
     super(null, {
       contents: [
         new Label(null, { 
@@ -211,7 +238,7 @@ class ForecastRow extends Row {
           string: formatTimeLabel(item[0]) 
         }),
         new Content(null, {
-          top: 0, left: 3, width: 30, height: 30,
+          left: 3, width: 30, height: 30,
           skin: weatherSkin, variant: parseInt(item[2])
         }),
         new Label(null, { 
@@ -224,17 +251,12 @@ class ForecastRow extends Row {
           variant: Math.round(item[3] / 45) % 8
         }),
         new Label(null, {
-          style: styles.small,
-          string: item[4],
-          top: 8,
-          left: 3,
-          width: 20,
+          left: 7, top: 0, right: 0, height: 48, style: styles.small, 
+          string: "Wind: " + item[4] + "\nRain: " + item[5] + "\nHum: " + item[6] + "%"
         }),
-        new Label(null, {
-          left: 7, top: 0, width: 62, style: styles.small, 
-          string: "Rain: " + item[5] + "\nHum: " + item[6] + "%"
-        }),
-      ]
+      ],
+      left: 0, right: 0,
+      skin: rowSkins[index % 2],
     });
   }
 }
@@ -286,7 +308,7 @@ function renderForecast(forecast, scrollToBottom) {
 
   for (let i = 0; i < forecast.length; i++) {
     const item = forecast[i].split(",");
-    forecastList.add(new ForecastRow(item));
+    forecastList.add(new ForecastRow(i, item));
   };
 
   if (scrollToBottom) {
